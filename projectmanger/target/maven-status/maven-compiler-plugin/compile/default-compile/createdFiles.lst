@@ -1,0 +1,13 @@
+com\fsd\projectmanager\bo\TaskVO.class
+com\fsd\projectmanager\entity\Project.class
+com\fsd\projectmanager\entity\ParentTask.class
+com\fsd\projectmanager\bo\ProjectVO.class
+com\fsd\projectmanager\bo\ParentTaskVO.class
+com\fsd\projectmanager\repository\TaskManagerRepository.class
+com\fsd\projectmanger\controller\TaskController.class
+com\fsd\projectmanager\entity\User.class
+com\fsd\projectmanger\ProjectmangerApplication.class
+com\fsd\projectmanager\service\impl\TaskManagerServiceImpl.class
+com\fsd\projectmanager\service\TaskManagerService.class
+com\fsd\projectmanager\bo\UserVO.class
+com\fsd\projectmanager\entity\Task.class
