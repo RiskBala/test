@@ -1,0 +1,50 @@
+<div class="container">
+    <div class="row">
+    <div class="col-md-12">
+      <div class="row">
+          <div class="col-xs-12">
+    <form >
+      <div class="row">
+        <label for="task"  class="col-md-4" >Task</label>
+        <input class="col-md-4" type="text" [(ngModel)]="task.task"  name="task" id="task" required >
+      </div>
+      <br>
+      <div class="row">
+          <label for="task"  class="col-md-4" >Priority</label>
+          <input class="col-md-4" type="text"  [(ngModel)]="task.priority" name="priority" id="priority" required>
+      </div>
+        <br>
+      <div class="row">
+        <label for="parentTask" class="col-md-4" >Parent Task</label>
+        <input class="col-md-4" type="text" [(ngModel)]="task.parentTask"   name="parentTask" id="parentTask" required>
+      </div>
+      <br>
+      <div class="row">
+        <label for="startDate" class="col-md-4" >Start Date</label>
+              <input class="col-md-4" type="date" [(ngModel)]="task.startDate"   name="startDate" id="startDate" required>
+     </div>
+     <br>
+     <div class="row">
+      <label for="endDate" class="col-md-4" >End Date</label>
+      <input class="col-md-4" type="date" [(ngModel)]="task.endDate"   name="endDate" id="endDate" required>
+   
+    </div>
+    <br>
+    <div class="row">
+        
+      <div class="col-md-6">
+      <button type="submit" class="btn btn-success" (click)="updateTask(task)">Update Task</button>  
+      </div>
+  
+      <div class="col-md-1">
+      <button type="cancel" routerLink="/viewtask" class="btn btn-primary">Cancel</button>
+    </div>
+    </div>
+      <br>
+    </form>
+    </div>
+    </div>
+  </div>
+  </div>
+  </div>
+  <router-outlet></router-outlet>

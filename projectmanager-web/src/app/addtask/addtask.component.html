@@ -1,0 +1,74 @@
+<div class="container">
+  <div class="row">
+  <div class="col-md-12">
+    <div class="row">
+        <div class="col-xs-12">
+  <form >
+    <div class="row">
+      <label for="task"  class="col-md-4" >Task</label>
+      <input class="col-md-4" type="text" [(ngModel)]="task.task"  name="task" required minlength="4" >
+    </div>
+    <div class="row">
+        <label for="task"  class="col-md-4" >Priority</label>
+        <input class="col-sm-2" type="range"  [(ngModel)]="task.priority" title="{{task.priority}}" name="priority" id="priority" required>{{task.priority}}
+       
+    </div>
+      <br>
+    <div class="row">
+      <label for="parentTask" class="col-md-4" >Parent Task</label>
+      <input class="col-md-4" type="text" [(ngModel)]="task.parentTask"   name="parentTask" id="parentTask" required>
+    </div>
+    <br>
+    <div class="row">
+      <label for="startDate" class="col-md-4" >Start Date</label>
+            <input class="col-md-4" type="date" [(ngModel)]="task.startDate"   name="startDate" id="startDate" required>
+   </div>
+   <br>
+   <div class="row">
+    <label for="endDate" class="col-md-4" >End Date</label>
+    <input class="col-md-4" type="date" [(ngModel)]="task.endDate"   name="endDate" id="endDate" (blur)="compareTwoDates()" required>
+ 
+    
+    <div *ngIf="error.isError" class="alert alert-danger">
+       {{ error.errorMessage }}
+    </div>
+
+
+  </div>
+  <br>
+  <div class="row">
+      
+    <div class="col-md-6">
+    <button type="submit" class="btn btn-success" (click)="addTask()">Add Task</button>  
+    </div>
+
+    <div class="col-md-1">
+    <button type="reset" class="btn btn-primary">Reset</button>
+  </div>
+  </div>
+    <br>
+  </form>
+  </div>
+  </div>
+</div>
+</div>
+</div>
+<div class="modal fade" role="dialog" id="submitModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">{{modalHeading}}</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <!-- Modal body -->
+        <div class="modal-body">
+          {{modalBody}}
+        </div>
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal" (click)=resetButton()>Back To Add User</button>
+        </div>
+      </div>
+    </div>
+</div>

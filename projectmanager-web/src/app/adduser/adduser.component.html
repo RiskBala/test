@@ -1,0 +1,115 @@
+<div class="container">
+    <div class="row">
+    <div class="col-md-12">
+      <div class="row">
+          <div class="col-xs-12">
+    <form >
+      <div class="row">
+        <label for="firstName"  class="col-md-3" >First Name</label>
+        <input class="col-md-4" type="text" [(ngModel)]="user.firstName"  name="firstName" required minlength="4" >
+      </div>
+     
+        <br>
+      <div class="row">
+        <label for="lastName" class="col-md-3" >Last Name</label>
+        <input class="col-md-4" type="text" [(ngModel)]="user.lastName"   name="lastName" id="lastName" required>
+      </div>
+      <br>
+      <div class="row">
+          <label for="employeeId" class="col-md-3" >Employee ID</label>
+          <input class="col-md-2" type="text" [(ngModel)]="user.employeeId"   name="employeeId" id="employeeId" required>
+        </div>
+        <br>
+     
+    <div class="row">
+        <div class="col-md-5">
+
+        </div>
+      <div class="col-md-1">
+          <button type="submit" class="btn btn-success" (click)="addUser()">Add Task</button>  
+      </div>
+      <div class="col-md-1">
+            </div>
+      <div class="col-md-1">
+      <button type="reset" class="btn btn-primary">Reset</button>
+    </div>
+    </div>
+      <br>
+    </form>
+    </div>
+    </div>
+  </div>
+  </div>
+  </div>
+  <hr/>
+  <form #viewUsersForm="ngForm" novalidate >
+      <div class="container">
+      <div class="row">
+      <div class="form-group row">
+          <div class="col-sm-2">
+              <input type="text" class="form-control" id="searchUser" name="searchUser" #searchProject="ngModel" [(ngModel)]="searchUsers" placeholder="Search User">
+          </div>
+          <div class="col-sm-2">
+              <label class="col-form-label">Sort:</label>
+          </div>
+          <div class="col-sm-2">
+              <button type="button" class="btn btn-secondary" (click)=sortByFirstName()>First Name</button>
+          </div>
+          <div class="col-sm-2">
+              <button type="button" class="btn btn-secondary" (click)=sortByLastName()>Last Name</button>
+          </div>
+          <div class="col-sm-2">
+              <button type="button" class="btn btn-secondary" (click)=sortByEmployeeId()>Employee ID</button>
+          </div>
+          <div class="col-sm-2">
+
+          </div>
+          <div class="col-sm-2">
+
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-sm-1"></div>
+      <div class="list-group col-md-8">
+        
+          <div class="row list-group-item" *ngFor="let item of usersList | UserPipe : searchUsers">
+              
+              <div class="col-md-9" style="background-color: rgb(228, 224, 224);"  >
+                  <br/><strong>
+                  <span class="col-form-label">Employee Id: {{item.employeeId}}</span><br/>
+                  <span class="col-form-label">First Name: {{item.firstName}}</span><br/>
+                  <span class="col-form-label">Last Name: {{item.lastName}}</span><br/><br/>
+                </strong>
+              </div>
+              <div class="col-md-3">
+                      <div *ngIf="item.status === 'A'">
+                          <span><button type="button" class="btn btn-info" (click)=editUser(item)>Edit User</button></span><br/> <br/>
+                          <span><button type="button" class="btn btn-secondary" style="margin:top" (click)=deleteUser(item)>Delete User</button></span>
+                      </div>
+              </div>
+          </div>
+        </div>
+      </div>
+</div>
+      </div>
+  </form>
+  <button type="button" id="submitModalhide" class="btn btn-primary"  style="display: none;" data-toggle="modal" data-target="#submitModal"></button>
+  <div class="modal fade" role="dialog" id="submitModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">{{modalHeading}}</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <!-- Modal body -->
+          <div class="modal-body">
+            {{modalBody}}
+          </div>
+          <!-- Modal footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal" (click)=resetButton()>Back To Add User</button>
+          </div>
+        </div>
+      </div>
+  </div>
