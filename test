@@ -1,0 +1,106 @@
+package com.online.event.detail;
+
+
+import static org.junit.Assert.assertTrue;
+
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration;
+import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import com.online.event.detail.model.Event;
+import com.online.event.detail.model.EventLocation;
+import com.online.event.detail.repository.EventDetailRepository;
+import com.online.event.detail.repository.RegistraionRepository;
+
+
+
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = EventdetailApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("test")
+@EnableAutoConfiguration(exclude={MongoAutoConfiguration.class, MongoDataAutoConfiguration.class})
+public class EventdetailApplicationTests {
+
+	@LocalServerPort
+	private int port;
+
+	@MockBean
+	private EventDetailRepository repository;
+	
+	@MockBean
+	private RegistraionRepository regRepository;
+
+	@Autowired
+	private TestRestTemplate template;
+
+
+	@Test
+	public void testAllOpenEvents() throws Exception {
+		Mockito.when(repository.findByStatus(Mockito.anyString())).thenReturn(EventdetailApplicationTests.mockData());
+		HttpHeaders headers = new HttpHeaders();
+		headers.setAccept(Arrays.asList(new MediaType[] { MediaType.APPLICATION_JSON }));
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		headers.set("userId", "employee1");
+		headers.set("roles", "user");//events/v1/{eventStatus}
+		ResponseEntity<String> response = template.exchange(
+				new URL("http://localhost:" + port + "/events/v1/open").toString(), HttpMethod.OPTIONS,
+				new HttpEntity<>(headers), String.class);
+		assertTrue(StringUtils.contains(response.getBody(), "tech sess"));
+	}
+
+	@Test
+	public void testGetAllEvents() throws Exception {
+		
+		HttpHeaders headers = new HttpHeaders();
+		headers.setAccept(Arrays.asList(new MediaType[] { MediaType.APPLICATION_JSON }));
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		headers.set("userId", "admin1");
+		headers.set("roles", "ADMIN");
+		Mockito.when(repository.findAll()).thenReturn(EventdetailApplicationTests.mockData());
+		ResponseEntity<String> response = template.exchange(
+				new URL("http://localhost:" + port + "/events/eventStatus").toString(), HttpMethod.GET,
+				new HttpEntity<>(headers), String.class);
+		assertTrue(StringUtils.contains(response.getBody(), "tech sess"));
+	}
+
+	public static List<Event> mockData() {
+		List<Event> events = new ArrayList<Event>();
+		EventLocation eventLocation = new EventLocation();
+		eventLocation.setAddress1("Address1");
+		eventLocation.setAddress2("address2");
+		eventLocation.setCity("city");
+		eventLocation.setPinCode("12345");
+		eventLocation.setState("TN");
+		Event event = new Event();
+		event.setId("1");
+		event.setEventName("tech sess");
+		event.setDescription("tech sess");
+		event.setPointOfContact("100100");
+		event.setFromDateTime("01/01/2020");
+		event.setToDateTime("01/01/2020");
+		event.setStatus("OPEN");
+		event.setEventLocation(eventLocation);
+		events.add(event);
+		return events;
+	}
+}
