@@ -1,106 +1,331 @@
-package com.online.event.detail;
+package com.selenium.pages;
 
+import org.openqa.selenium.By;
 
-import static org.junit.Assert.assertTrue;
+import com.selenium.setup.DriverSetup;
 
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration;
-import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
-
-import com.online.event.detail.model.Event;
-import com.online.event.detail.model.EventLocation;
-import com.online.event.detail.repository.EventDetailRepository;
-import com.online.event.detail.repository.RegistraionRepository;
-
-
-
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = EventdetailApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test")
-@EnableAutoConfiguration(exclude={MongoAutoConfiguration.class, MongoDataAutoConfiguration.class})
-public class EventdetailApplicationTests {
-
-	@LocalServerPort
-	private int port;
-
-	@MockBean
-	private EventDetailRepository repository;
-	
-	@MockBean
-	private RegistraionRepository regRepository;
-
-	@Autowired
-	private TestRestTemplate template;
-
-
-	@Test
-	public void testAllOpenEvents() throws Exception {
-		Mockito.when(repository.findByStatus(Mockito.anyString())).thenReturn(EventdetailApplicationTests.mockData());
-		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Arrays.asList(new MediaType[] { MediaType.APPLICATION_JSON }));
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.set("userId", "employee1");
-		headers.set("roles", "user");//events/v1/{eventStatus}
-		ResponseEntity<String> response = template.exchange(
-				new URL("http://localhost:" + port + "/events/v1/open").toString(), HttpMethod.OPTIONS,
-				new HttpEntity<>(headers), String.class);
-		assertTrue(StringUtils.contains(response.getBody(), "tech sess"));
+public class CustomerForm extends DriverSetup{ // Do not change the class name
+	// Implement code here
+	public void setCustomerName(String cName) {
+		driver.findElement(By.xpath("//input[@name='cname']")).sendKeys(cName);
 	}
 
-	@Test
-	public void testGetAllEvents() throws Exception {
+	public void setAge(String age) {
+		driver.findElement(By.xpath("//input[@name='age']")).sendKeys(age);
+	}
+
+	public void setAddress(String address) {
 		
-		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Arrays.asList(new MediaType[] { MediaType.APPLICATION_JSON }));
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.set("userId", "admin1");
-		headers.set("roles", "ADMIN");
-		Mockito.when(repository.findAll()).thenReturn(EventdetailApplicationTests.mockData());
-		ResponseEntity<String> response = template.exchange(
-				new URL("http://localhost:" + port + "/events/eventStatus").toString(), HttpMethod.GET,
-				new HttpEntity<>(headers), String.class);
-		assertTrue(StringUtils.contains(response.getBody(), "tech sess"));
+		driver.findElement(By.xpath("//input[@name='address']")).sendKeys(address);
 	}
 
-	public static List<Event> mockData() {
-		List<Event> events = new ArrayList<Event>();
-		EventLocation eventLocation = new EventLocation();
-		eventLocation.setAddress1("Address1");
-		eventLocation.setAddress2("address2");
-		eventLocation.setCity("city");
-		eventLocation.setPinCode("12345");
-		eventLocation.setState("TN");
-		Event event = new Event();
-		event.setId("1");
-		event.setEventName("tech sess");
-		event.setDescription("tech sess");
-		event.setPointOfContact("100100");
-		event.setFromDateTime("01/01/2020");
-		event.setToDateTime("01/01/2020");
-		event.setStatus("OPEN");
-		event.setEventLocation(eventLocation);
-		events.add(event);
-		return events;
+	public void setPhoneNumber(String phoneNumber) {
+		driver.findElement(By.xpath("//input[@name='phonenumber']")).sendKeys(phoneNumber);
+	}
+
+	public void setEmail(String email) {
+		driver.findElement(By.xpath("//input[@name='email']")).sendKeys(email);
+	}
+
+	public void submitForm() {
+		driver.findElement(By.xpath("//input[@id='submit']")).click();
+	}
+
+	public String getErrorMessage() {
+		
+		return driver.findElement(By.xpath("//div[@id='message']")).getText();
 	}
 }
+
+
+
+DisplayCustomer
+
+
+package com.selenium.pages;
+
+import org.openqa.selenium.By;
+
+import com.selenium.setup.DriverSetup;
+
+public class DisplayCustomer extends DriverSetup{ // Do not change the class name
+	// Implement code here
+	public String getTitle() {
+		return driver.findElement(By.xpath("//h2")).getText();
+	}
+	
+	public String getName() {
+		return driver.findElement(By.xpath("//tr//td[contains(text(),'Name')]/following-sibling::td")).getText();
+	}
+	
+	public String getAge() {
+		return driver.findElement(By.xpath("//tr//td[contains(text(),'Age')]/following-sibling::td")).getText();
+	}
+	
+	
+	public String getEmail() {
+		return driver.findElement(By.xpath("//tr//td[contains(text(),'Email')]/following-sibling::td")).getText();
+	}
+	
+	
+	public String getAddress() {
+		return driver.findElement(By.xpath("//tr//td[contains(text(),'Address')]/following-sibling::td")).getText();
+	}
+	
+	public String getPhoneNumber() {
+		return driver.findElement(By.xpath("//tr//td[contains(text(),'Phone number')]/following-sibling::td")).getText();
+	}
+	
+	
+}
+
+
+DriverSetup
+//CREATE DRIVER USING THIS CLASS. DO NOT CHANGE THE CLASS AND METHOD NAME
+
+package com.selenium.setup;
+
+import org.openqa.selenium.firefox.FirefoxBinary;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.firefox.*;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+
+public class DriverSetup {
+	public static WebDriver driver;
+	public static String baseUrl = "http://webapps.tekstac.com/CustomerRegistration/";
+	
+	public  WebDriver getDriver() {
+		/** For Windows OS
+		    System.setProperty("webdriver.geckodriver.driver", "geckodriver.exe");
+		**/
+		
+		/** For Linux OS **/
+	    System.setProperty("webdriver.gecko.driver", "/usr/bin/geckodriver");
+		
+        FirefoxBinary firefoxBinary = new FirefoxBinary();
+        firefoxBinary.addCommandLineOptions("--headless");
+        FirefoxProfile profile=new FirefoxProfile();
+        FirefoxOptions firefoxOptions = new FirefoxOptions();
+        firefoxOptions.setBinary(firefoxBinary);
+        firefoxOptions.setProfile(profile);
+        driver = new FirefoxDriver(firefoxOptions);
+	    driver.navigate().to(DriverSetup.baseUrl);
+	    return driver;
+	}
+	
+
+}
+
+
+ExcelUtils
+
+package com.selenium.setup;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+public class ExcelUtils { // Do not change the class name
+	public Object[][] getExcelData() throws IOException {
+		FileInputStream fis = new FileInputStream(new File("customer_registration.xlsx"));
+		Workbook workbook = new XSSFWorkbook(fis);
+		XSSFSheet sheet = (XSSFSheet) workbook.getSheet("customer_invalid");
+		int numRows = sheet.getPhysicalNumberOfRows();
+		int col = sheet.getRow(0).getLastCellNum();
+		DataFormatter df = new DataFormatter();
+		String[][] excelData = new String[numRows][col];
+		for (int i = 0; i < numRows; i++) {
+			XSSFRow row = sheet.getRow(i);
+			for (int j = 0; j < col; j++) {
+				XSSFCell cell = row.getCell(j);
+				String value = df.formatCellValue(cell);
+				excelData[i][j] = value.trim();
+			}
+		}
+
+		return excelData;
+	}
+}
+
+
+
+TestCustomerForm
+
+package com.selenium.tests;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.testng.annotations.AfterClass;
+import org.openqa.selenium.WebDriver;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+
+import com.selenium.pages.CustomerForm;
+import com.selenium.setup.DriverSetup;
+
+public class TestCustomerForm extends DriverSetup { // Do not change the class name
+	// Implement code here
+	public WebDriver d;
+	static String blankErrtxt;
+
+	@BeforeClass
+	public void setUp() {
+		d = getDriver();
+	}
+
+	@Test(dataProvider = "customerInvalid ")
+	public void testInvalidCustomerDetails(String testcasename, String name, String age, String address,
+			String phoneNumber, String email) {
+		CustomerForm c = new CustomerForm();
+		c.setCustomerName(name);
+		c.setAge(age);
+		c.setAddress(address);
+		c.setPhoneNumber(phoneNumber);
+		c.setEmail(email);
+		c.submitForm();
+		blankErrtxt = c.getErrorMessage();
+
+	}
+
+	@AfterClass
+	public void closeBrowser() {
+		d.quit();
+	}
+
+	
+	@DataProvider(name = "customerInvalid ")
+	public Object[][] getExcelData() throws IOException 
+	{
+		FileInputStream fis = new FileInputStream(new File("customer_registration.xlsx"));
+		Workbook workbook = new XSSFWorkbook(fis);
+		XSSFSheet sheet = (XSSFSheet) workbook.getSheet("customer_invalid");
+		int numRows = sheet.getPhysicalNumberOfRows();
+		int col = sheet.getRow(0).getLastCellNum();
+		DataFormatter df = new DataFormatter();
+		String[][] excelData = new String[numRows][col];
+		for (int i = 0; i < numRows; i++) {
+			XSSFRow row = sheet.getRow(i);
+			for (int j = 0; j < col; j++) {
+				XSSFCell cell = row.getCell(j);
+				String value = df.formatCellValue(cell);
+				excelData[i][j] = value.trim();
+			}
+		}
+
+		return excelData;
+	}
+}
+
+
+TestDisplayCustomer
+
+package com.selenium.tests;
+
+import static org.testng.Assert.assertEquals;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.openqa.selenium.WebDriver;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+import com.selenium.pages.CustomerForm;
+import com.selenium.pages.DisplayCustomer;
+import com.selenium.setup.DriverSetup;
+import com.selenium.setup.ExcelUtils;
+
+public class TestDisplayCustomer extends DriverSetup{   //Do not change the class name
+	//Implement code here
+	
+	WebDriver d;
+	 String result;
+	 String titletxt;
+	 String customerNametxt;
+	 String agetxt;
+	 String addresstxt;
+	 String numbertxt;
+	 String emailtxt;
+
+	@BeforeClass
+	public void setUp() {
+		d = getDriver();
+	}
+	
+	@AfterClass
+	public void closeBrowser() {
+		d.quit();
+	}
+
+	@Test(dataProvider = "testValidCustomer ")
+	public void testInvalidCustomerDetails(String testcasename, String name, String age, String address,
+			String phoneNumber, String email) {
+		CustomerForm c = new CustomerForm();
+		c.setCustomerName(name);
+		c.setAge(age);
+		c.setAddress(address);
+		c.setPhoneNumber(phoneNumber);
+		c.setEmail(email);
+		c.submitForm();
+		DisplayCustomer d=new DisplayCustomer();
+		titletxt = d.getTitle();
+		customerNametxt=d.getName();
+		agetxt=d.getAge();
+		addresstxt=d.getAddress();
+		numbertxt=d.getPhoneNumber();
+		emailtxt=d.getEmail();
+
+	}
+	
+	@DataProvider(name = "testValidCustomer ")
+	public Object[][] getExcelData() throws IOException 
+	{
+		FileInputStream fis = new FileInputStream(new File("customer_registration.xlsx"));
+		Workbook workbook = new XSSFWorkbook(fis);
+		XSSFSheet sheet = (XSSFSheet) workbook.getSheet("customer_valid");
+		int numRows = sheet.getPhysicalNumberOfRows();
+		int col = sheet.getRow(0).getLastCellNum();
+		DataFormatter df = new DataFormatter();
+		String[][] excelData = new String[numRows][col];
+		for (int i = 0; i < numRows; i++) {
+			XSSFRow row = sheet.getRow(i);
+			for (int j = 0; j < col; j++) {
+				XSSFCell cell = row.getCell(j);
+				String value = df.formatCellValue(cell);
+				excelData[i][j] = value.trim();
+			}
+		}
+
+		return excelData;
+	}
+}
+
+
