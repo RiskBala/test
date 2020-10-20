@@ -329,3 +329,39 @@ public class TestDisplayCustomer extends DriverSetup{   //Do not change the clas
 }
 
 
+import java.util.concurrent.TimeUnit;
+import org.openqa.selenium.*;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.Select; 
+public class Testcase1 {
+                public static void main(String[] args) {
+                                //System.setProperty("webdriver.gecko.driver", "C:\\Users\\suhla2\\Downloads\\geckodriver-v0.23.0-win64\\geckodriver.exe");
+                                System.setProperty("webdriver.chrome.driver","C:\\Users\\suhla2\\Downloads\\chromedriver.exe");                      
+                                WebDriver driver = new ChromeDriver();
+                      //Puts an Implicit wait, Will wait for 10 seconds before throwing exception
+                      driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+                      
+                      String baseUrl = "https://toolsqa.com/automation-practice-form";      
+		      
+		       // launch Chrome and direct it to the Base URL
+              driver.get(baseUrl);
+              driver.manage().window().maximize();               
+              driver.findElement(By.name("firstname")).clear();
+              driver.findElement(By.name("firstname")).sendKeys(“Suriya"); 
+              driver.findElement(By.xpath("//input[@name='lastname' and 
+@type='text']")).sendKeys(“L");
+               driver.findElement(By.id("sex-0")).click();
+               driver.findElement(By.id("exp-2")).click();
+               driver.findElement(By.xpath("//input[@id='datepicker' and @type='text']")).sendKeys("21/11/1992");
+                driver.findElement(By.xpath("//input[@id='profession-1' and @value='Automation Tester' and @type='checkbox']")).click();
+                driver.findElement(By.id("continents")).click();
+                 Select dropdown = new Select(driver.findElement(By.id("continents")));
+                  dropdown.selectByVisibleText("Asia");
+                  driver.findElement(By.xpath("//button[@id='submit' and @name='submit']")).click();
+    //close Fire fox
+                   driver.close();
+                } }
+
+
+
